@@ -7,7 +7,9 @@ I've described the implementation in detail on my blog: [Learning to Fly](https:
 # Building
 
 ```bash
-$ cd libs/simulation-wasm
+$ git clone https://github.com/Patryk27/shorelark.git
+$ cd shorelark/libs/simulation-wasm
+$ [ -x "$(which wasm-pack)" ]|| cargo install wasm-pack
 $ wasm-pack build --release
 $ cd ../../www
 $ npm install
