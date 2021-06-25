@@ -25,6 +25,14 @@ async fn cached(_req: HttpRequest) -> Result<NamedFile> {
     let path: PathBuf = format!("./public_html{}", filename).parse().unwrap();
     Ok(NamedFile::open(path)?)
 }
+arync fn cached_static(_req: HttpRequest) -> Result<NamedFile> {
+    let filename = _req.path();
+        println!("{:?}", filename);
+    // don't need to check that it only has [.a..zA..Z0..1] and no [;..\/] or other shenanigans
+    // because we will only be routed here in App::new() matches
+    let path: PathBuf = format!("./public_html{}", filename).parse().unwrap();
+    Ok(NamedFile::open(path)?)
+}
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -45,6 +53,7 @@ async fn main() -> std::io::Result<()> {
             .route("", web::get().to(index))
             .route("/", web::get().to(index))
             .route("/index.html", web::get().to(index))
+            .route("/static/{file_name}", web::get().to(cached_static))
             .route("/app.js", web::get().to(cached))
             .route("/app.css", web::get().to(cached))
             .route("/favicon.ico", web::get().to(favicon))
